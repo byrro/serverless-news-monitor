@@ -9,4 +9,4 @@ MAX_ARTICLES_PER_SOURCE = 50
 DOCS_URL = 'https://github.com/byrro/serverless-news-monitor/'
 
 # Custom path to NLTK data
-NLTK_DATA_PATH = os.path.join('vendor', 'nltk_data')
+NLTK_DATA_PATH = os.path.join('chalicelib', 'nltk_data')

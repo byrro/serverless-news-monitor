@@ -58,7 +58,20 @@ def request_handler_constructor(
 def set_nltk_path():
     '''Set custom path for NLTK data'''
     dir_path = os.getcwd()
+    folder = os.path.basename(dir_path)
+
+    print('')
+    print('dirpath:', dir_path)
+    print('folder:', folder)
+    print('')
+
+    print('c.NLTK_DATA_PATH:', c.NLTK_DATA_PATH)
+    print('')
+
     nltk_path = os.path.join(dir_path, c.NLTK_DATA_PATH)
 
     if os.path.exists(nltk_path):
         nltk.data.path.append(nltk_path)
+
+    print('nltk.data.path:', nltk.data.path)
+    print('')
