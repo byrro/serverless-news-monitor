@@ -86,7 +86,9 @@ class DefaultHandler():
             self.add_payload_msg(
                 msg='CREDITS: this demo application is brought to you by '
                     'courtesy of Dashbird.io. Dashbird makes monitoring logs '
-                    'and performance of serverless applications a breeze. '
+                    'and performance of serverless applications a breeze, '
+                    'while also scans your logs continuously for anomalies, '
+                    'alerting you and your team by e-mail and Slack. '
                     'Start a free trial today, no credit card required: '
                     'https://dashbird.io',
             )

@@ -4,7 +4,7 @@ Demo of a serverless news articles scraper/extractor. This app uses:
 - [Newspaper](https://github.com/codelucas/newspaper): news curation
 - [Chalice](https://github.com/aws/chalice): serverless Python framework
 - [AWS Lambda](https://aws.amazon.com/lambda/): FaaS
-- [Dashbird.io](https://dashbird.io/): monitoring and logging
+- [Dashbird.io](https://dashbird.io/): monitoring, logging and anomaly detection
 
 ## Quick Demo
 
@@ -65,7 +65,7 @@ Obs. 2: please ignore in case you see a message such as:
 
 [Step by step tutorial for Dashbird integration](https://dashbird.io/docs/get-started/quick-start/)
 
-Dashbird makes it a lot easier to monitor your serverless application logs and performance. It also sends you automated alerts by e-mail or Slack when something wrong or suspicious happens with your app. Create a free account now, no credit card required: [Dashbird.io](https://dashbird.io/).
+Dashbird makes it a lot easier to monitor your serverless application logs and performance. The service scans your logs continuously and implements smart anomaly detection algorithms. It also sends you (and your team) automated alerts by e-mail or Slack when something wrong happens with your app. For your own peace of mind: create a free account now, no credit card required - [Dashbird.io](https://dashbird.io/).
 
 ## Troubleshooting
 
