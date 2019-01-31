@@ -42,12 +42,16 @@ def run(*args, **kwargs):
             print(json.dumps(response.payload))
             return response.payload
 
+    except TypeError as error:
+        utils.log_exception(error=error)
+        return {
+            'status': 400,
+            'error': str(error),
+        }
+
     # Make sure uncaught errors are handled properly
     except Exception as error:
-        # Log the error and stack trace for debugging purposes
-        logger.error('UNCAUGHT_ERROR')
-        logger.error(f'{type(error).__name__}: {str(error)}')
-        logger.exception(error)
+        utils.log_uncaught_exception(error=error)
 
         return {
             'status': 500,

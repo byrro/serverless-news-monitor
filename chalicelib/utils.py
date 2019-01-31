@@ -1,5 +1,20 @@
 '''Utility functions for the Serverless News Articles Monitor App'''
+import logging
 from chalicelib import handler
+
+
+logger = logging.getLogger()
+
+
+def log_uncaught_exception(*, error):
+    '''Log a Python Exception'''
+    logger.error('UNCAUGHT EXCEPTION:')
+    log_exception(error=error)
+
+
+def log_exception(*, error):
+    logger.error(f'{type(error).__name__}: {str(error)}')
+    logger.exception(error)
 
 
 def request_handler_constructor(
@@ -11,8 +26,10 @@ def request_handler_constructor(
     :arg param1: (str|optional) URI argument 1
     :arg param2: (str!optional) URL argument 2
     '''
-    if False:
-        pass
+    query = request['query_params']
+
+    if (query and query.get('action') == 'build') or action == 'build':
+        handler_class = handler.BuildHandler
 
     else:
         handler_class = handler.DefaultHandler
