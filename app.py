@@ -10,10 +10,10 @@ logger = logging.getLogger()
 logger.setLevel(logging.WARNING)
 
 
-@app.route('/run', methods=['GET', 'POST'])
-@app.route('/run/{action}', methods=['GET', 'POST'])
-@app.route('/run/{action}/{param1}', methods=['GET', 'POST'])
-@app.route('/run/{action}/{param1}/{param2}', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/{action}', methods=['GET', 'POST'])
+@app.route('/{action}/{param1}', methods=['GET', 'POST'])
+@app.route('/{action}/{param1}/{param2}', methods=['GET', 'POST'])
 def run(*args, **kwargs):
     # Log all incoming requests for monitoring and security purposes
     # Json format is easier to read on log applications, such as AWS CloudWatch

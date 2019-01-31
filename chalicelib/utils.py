@@ -1,6 +1,11 @@
 '''Utility functions for the Serverless News Articles Monitor App'''
 import logging
-from chalicelib import handler
+import os
+import nltk
+from chalicelib import (
+    constants as c,
+    handler,
+)
 
 
 logger = logging.getLogger()
@@ -48,3 +53,12 @@ def request_handler_constructor(
         param1=param1,
         param2=param2,
     )
+
+
+def set_nltk_path():
+    '''Set custom path for NLTK data'''
+    dir_path = os.getcwd()
+    nltk_path = os.path.join(dir_path, c.NLTK_DATA_PATH)
+
+    if os.path.exists(nltk_path):
+        nltk.data.path.append(nltk_path)

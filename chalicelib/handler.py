@@ -80,6 +80,33 @@ class DefaultHandler():
                     'although more were found on this source.',
             )
 
+    def enrich_payload(self):
+        '''Enrich payload with additional information'''
+        if type(self.payload) is dict:
+            self.add_payload_msg(
+                msg='CREDITS: this demo application is brought to you by '
+                    'courtesy of Dashbird.io. Dashbird makes monitoring logs '
+                    'and performance of serverless applications a breeze. '
+                    'Start a free trial today, no credit card required: '
+                    'https://dashbird.io',
+            )
+
+            self.add_payload_msg(
+                msg='COPYRIGHT NOTICE: the data retrieved by the application '
+                    'may be subject to copyright and/or terms of usage. '
+                    'This application is intended ONLY for demonstration '
+                    'purposes. It does not grant you any rights over the '
+                    'content retrieved and you are solely responsible for '
+                    'non-legal usage of the application.',
+            )
+
+        self.enrich()
+
+        return self.payload
+
+    def enrich(self):
+        pass
+
 
 class BuildHandler(DefaultHandler):
     '''Build News Source Handler'''
@@ -125,8 +152,6 @@ class BuildHandler(DefaultHandler):
                 'feeds': self.source.feed_urls(),
             }
 
-            self.enrich_payload()
-
         except Exception as error:
             utils.log_exception(error=error)
 
@@ -139,13 +164,14 @@ class BuildHandler(DefaultHandler):
 
             self.payload = None
 
+        self.enrich_payload()
+
         return self
 
-    def enrich_payload(self):
-        '''Enrich payload with additional information'''
-        self.articles_truncated_msg()
-
-        return self.payload
+    def enrich(self):
+        '''Enrich payload'''
+        if type(self.payload) is dict:
+            self.articles_truncated_msg()
 
 
 class GetMetaHandler(DefaultHandler):
@@ -190,6 +216,8 @@ class GetMetaHandler(DefaultHandler):
 
             self.payload = None
 
+        self.enrich_payload()
+
         return self
 
 
@@ -221,7 +249,10 @@ class ParseArticleHandler(DefaultHandler):
             article = newspaper.Article(self.url)
             article.download()
             article.parse()
-            article.nlp()
+
+            self.payload = {
+                'status': 200,
+            }
 
             try:
                 publish_datetime = article.publish_date.strftime(
@@ -229,24 +260,46 @@ class ParseArticleHandler(DefaultHandler):
             except Exception:
                 publish_datetime = None
 
+            try:
+                # Set custom NLTK data path (needed for NLP features below)
+                utils.set_nltk_path()
+
+                article.nlp()
+                summary = article.summary
+                keywords = list(article.keywords)
+
+            except (LookupError, FileNotFoundError):
+                utils.log_exception(
+                    error=LookupError('NLTK corpora data not found')
+                )
+                summary = None
+                keywords = []
+
+                self.add_payload_msg(
+                    msg='NLP features are disabled (LookupError: NLTK corpora '
+                        'data not found)'
+                )
+
             self.payload = {
-                'status': 200,
-                'article': {
-                    'url': self.url,
-                    'publish_datetime': publish_datetime,
-                    'title': article.title,
-                    'text': {
-                        'keywords': list(article.keywords),
-                        'summary': article.summary,
-                        'full': article.text,
-                    },
-                    'authors': list(article.authors),
-                    'media': {
-                        'images': list(article.images),
-                        'movies': list(article.movies),
+                **self.payload,
+                **{
+                    'article': {
+                        'url': self.url,
+                        'publish_datetime': publish_datetime,
+                        'title': article.title,
+                        'text': {
+                            'full': article.text,
+                            'keywords': keywords,
+                            'summary': summary,
                         },
-                    'html': article.html,
-                },
+                        'authors': list(article.authors),
+                        'media': {
+                            'images': list(article.images),
+                            'movies': list(article.movies),
+                            },
+                        'html': article.html,
+                    },
+                }
             }
 
         except Exception as error:
@@ -260,5 +313,7 @@ class ParseArticleHandler(DefaultHandler):
             }
 
             self.payload = None
+
+        self.enrich_payload()
 
         return self
