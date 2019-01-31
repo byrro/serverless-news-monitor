@@ -1,4 +1,5 @@
 '''Utility functions for the Serverless News Articles Monitor App'''
+import copy
 import logging
 import os
 import nltk
@@ -65,3 +66,13 @@ def set_nltk_path():
         nltk.data.path.append(nltk_path)
 
     return nltk_path
+
+
+def streamline_payload(*, payload):
+    '''Strip excessive data from response payload, such as full HTML content'''
+    payload = copy.deepcopy(payload)
+
+    if 'article' in payload and 'html' in payload['article']:
+        del payload['article']['html']
+
+    return payload

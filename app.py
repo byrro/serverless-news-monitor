@@ -38,8 +38,14 @@ def run(*args, **kwargs):
             return response.error
 
         else:
+            # Streamlined version of the payload for logging purposes
+            streamlined_payload = utils.streamline_payload(
+                payload=response.payload
+            )
+
             print('reponse.payload:')
-            print(json.dumps(response.payload))
+            print(json.dumps(streamlined_payload))
+
             return response.payload
 
     except TypeError as error:
