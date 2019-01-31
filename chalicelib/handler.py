@@ -201,10 +201,10 @@ class GetMetaHandler(DefaultHandler):
             }
 
             if 'hot_topics' in self.data:
-                self.payload['hot-topics'] = newspaper.hot()
+                self.payload['hot_topics'] = newspaper.hot()
 
             if 'popular_urls' in self.data:
-                self.payload['popular-urls'] = newspaper.popular_urls()
+                self.payload['popular_urls'] = newspaper.popular_urls()
 
         except Exception as error:
             utils.log_exception(error=error)
