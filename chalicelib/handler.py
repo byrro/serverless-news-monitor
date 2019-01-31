@@ -53,8 +53,12 @@ class DefaultHandler():
 
         self.payload = {
             'status': 200,
-            'msg': 'Hello World!',
         }
+
+        self.add_payload_msg(
+            msg=f"Action '{self.action}' was not recognized. Please refer to "
+                f"'{c.DOCS_URL}' for instructions on using this API."
+        )
 
         return self
 
@@ -130,7 +134,7 @@ class BuildHandler(DefaultHandler):
                 'status': 500,
                 'error':
                     f"Sorry, could not build source '{self.url}': "
-                    f'{str(error)}',
+                    f'{str(type(error).__name__)}'
             }
 
             self.payload = None
@@ -181,7 +185,7 @@ class GetMetaHandler(DefaultHandler):
                 'status': 500,
                 'error':
                     'Sorry, could not get news metadata: '
-                    f'{str(error)}',
+                    f'{str(type(error).__name__)}'
             }
 
             self.payload = None
@@ -217,27 +221,32 @@ class ParseArticleHandler(DefaultHandler):
             article = newspaper.Article(self.url)
             article.download()
             article.parse()
+            article.nlp()
 
             try:
-                publish_date = article.publish_date.strftime(
+                publish_datetime = article.publish_date.strftime(
                     '%Y-%m-%d %H:%M:%S')
             except Exception:
-                publish_date = None
+                publish_datetime = None
 
             self.payload = {
                 'status': 200,
                 'article': {
                     'url': self.url,
+                    'publish_datetime': publish_datetime,
                     'title': article.title,
+                    'text': {
+                        'keywords': list(article.keywords),
+                        'summary': article.summary,
+                        'full': article.text,
+                    },
                     'authors': list(article.authors),
-                    'publish_date': publish_date,
-                    'text': article.text,
                     'media': {
                         'images': list(article.images),
                         'movies': list(article.movies),
                         },
+                    'html': article.html,
                 },
-                'html': article.html,
             }
 
         except Exception as error:
@@ -246,8 +255,8 @@ class ParseArticleHandler(DefaultHandler):
             self.error = {
                 'status': 500,
                 'error':
-                    'Sorry, could not get news metadata: '
-                    f'{str(error)}',
+                    f"Sorry, could not parse article '{self.url}': "
+                    f'{str(type(error).__name__)}'
             }
 
             self.payload = None
