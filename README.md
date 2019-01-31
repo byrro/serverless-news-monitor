@@ -18,8 +18,8 @@ Customize the last URI parameter in each of the examples above to try the API wi
 
 ## Pre-requisites
 
-[Python 3.6+](https://www.python.org/downloads/release/python-370/)
-[pip 18.1+](https://pypi.org/project/pip/)
+- [Python 3.6+](https://www.python.org/downloads/release/python-370/)
+- [pip 18.1+](https://pypi.org/project/pip/)
 
 You can run the app locally on Linux, iOS or Windows.
 
@@ -29,25 +29,25 @@ Please refer to [requirements.txt](https://github.com/byrro/serverless-news-moni
 
 ## Setup & Deployment
 
-1. Clone (or fork) the repo:
+**1. Clone (or fork) the repo:**
 
 `git clone git@github.com:byrro/serverless-news-monitor.git`
 
-2. Enter the project directory:
+**2. Enter the project directory:**
 
 `cd serverless-news-monitor`
 
-3. Install dependencies (obs.: it's highly recommended to use a [virtual environment](https://docs.python.org/3/tutorial/venv.html)):
+**3. Install dependencies (obs.: it's highly recommended to use a [virtual environment](https://docs.python.org/3/tutorial/venv.html)):**
 
 `pip install -r requirements.txt`
 
-4. Run the app locally:
+**4. Run the app locally:**
 
 `chalice local`
 
 Access this example on your browser and make sure it's working: http://127.0.0.1:8000/build/techcrunch.com
 
-5. Deploy the app:
+**5. Deploy the app:**
 
 `chalice deploy`
 
@@ -58,9 +58,10 @@ Obs. 1: Make sure you have your [AWS credentials set](https://docs.aws.amazon.co
 Obs. 2: please ignore in case you see a message such as:
 
 > Could not install dependencies:
+
 > pyyaml
 
-7. Integrate [Dashbird.io](https://dashbird.io/) monitoring and logging for greater observability:
+**6. Integrate [Dashbird.io](https://dashbird.io/) monitoring and logging for greater observability:**
 
 [Step by step tutorial for Dashbird integration](https://dashbird.io/docs/get-started/quick-start/)
 
@@ -72,7 +73,7 @@ Dashbird makes it a lot easier to monitor your serverless application logs and p
 
 Use this deployment option if Chalice deploy is timing out.
 
-1. Create a new package:
+**1. Create a new package:**
 
 ```
 chalice package packaged/
@@ -84,14 +85,14 @@ Obs: please ignore in case you see a message such as:
 > Could not install dependencies:
 > pyyaml==3.13
 
-2. Create a CloudFormation template:
+**2. Create a CloudFormation template:**
 
 `aws cloudformation package --template-file ./sam.json --s3-bucket [bucket-name] --output-template-file sam-packaged.yaml`
 
-*Replace [bucket-name] with your own S3 bucket.*
+*CloudFormation needs an S3 Bucket to store the application package. Replace [bucket-name] with your own S3 bucket.*
 *This will upload the package to your S3 bucket, it may take a while to finish.*
 
-3. Deploy the application using CloudFormation:
+**3. Deploy the application using CloudFormation:**
 
 `aws cloudformation deploy --template-file ./sam-packaged.yaml --s3-bucket [bucket-name] --stack-name chalice-news-monitor-stack --capabilities CAPABILITY_IAM`
 
