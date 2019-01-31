@@ -31,6 +31,14 @@ def request_handler_constructor(
     if (query and query.get('action') == 'build') or action == 'build':
         handler_class = handler.BuildHandler
 
+    elif (query and query.get('action') == 'get-meta') \
+            or action == 'get-meta':
+        handler_class = handler.GetMetaHandler
+
+    elif (query and query.get('action') == 'parse-article') \
+            or action == 'parse-article':
+        handler_class = handler.ParseArticleHandler
+
     else:
         handler_class = handler.DefaultHandler
 
