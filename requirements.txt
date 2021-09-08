@@ -16,7 +16,7 @@ jmespath==0.9.3
 lxml==4.3.0
 newspaper3k==0.2.8
 nltk==3.4
-Pillow==5.4.1
+Pillow==8.3.2
 python-dateutil==2.7.5
 pyyaml>=4.2b1
 requests==2.21.0
